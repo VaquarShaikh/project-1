@@ -21,7 +21,7 @@ spec:                    #line7   (required field)
     spec:                #line21
       containers:
       - name: nextjsclient                                   #line23
-        image: gcr.io/groovy-age-436407-a6/project-1   #line24
+        image: infectedshawarma/project-1:latest   #line24
         imagePullPolicy: IfNotPresent                        #line25
         resources:
           limits:

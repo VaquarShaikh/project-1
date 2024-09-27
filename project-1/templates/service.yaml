@@ -1,18 +1,11 @@
-# project-1/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-service
-  labels:
-    app: {{ .Values.image.repository }}
+  name: { { include "project-1.fullname" . } }
+  labels: { { - include "project-1.labels" . | nindent 4 } }
 spec:
-  type: {{ .Values.service.type }}
-  selector:
-    app: {{ .Values.image.repository }}
+  type: { { .Values.service.type } }
   ports:
-    - protocol: TCP
-      port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.targetPort }}
-      {{- if .Values.service.nodePort }}
-      nodePort: {{ .Values.service.nodePort }}
-      {{- end }}
+    - port: { { .Values.service.port } }
+      targetPort: 3000
+  selector: { { - include "project-1.selectorLabels" . | nindent 4 } }

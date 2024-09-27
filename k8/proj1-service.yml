@@ -3,11 +3,10 @@ kind: Service
 metadata:
   name: project-1-service
 spec:
-  type: NodePort  # Change from LoadBalancer to NodePort
+  type: ClusterIP  # Changed to ClusterIP
   selector:
     app: nextjsweb
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 3000  # Port where your container is running the application
-      nodePort: 30080   # Optional: you can specify a port or let Kubernetes assign one
+      targetPort: 3000

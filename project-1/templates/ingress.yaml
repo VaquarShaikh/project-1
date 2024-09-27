@@ -1,18 +1,27 @@
-# project-1/templates/service.yaml
-apiVersion: v1
-kind: Service
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-service
+  name: {{ include "project-1.fullname" . }}
   labels:
-    app: {{ .Values.image.repository }}
+    {{- include "project-1.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
-  type: {{ .Values.service.type }}
-  selector:
-    app: {{ .Values.image.repository }}
-  ports:
-    - protocol: TCP
-      port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.targetPort }}
-      {{- if .Values.service.nodePort }}
-      nodePort: {{ .Values.service.nodePort }}
-      {{- end }}
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}(/|$)(.*)
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ include "project-1.fullname" $ }}
+                port: 
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}

@@ -1,31 +1,23 @@
-# project-1/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-deployment
-  labels:
-    app: {{ .Values.image.repository }}
+  name: { { include "project-1.fullname" . } }
+  labels: { { - include "project-1.labels" . | nindent 4 } }
 spec:
-  replicas: {{ .Values.replicaCount }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+  replicas: { { .Values.replicaCount } }
   selector:
-    matchLabels:
-      app: {{ .Values.image.repository }}
+    matchLabels: { { - include "project-1.selectorLabels" . | nindent 6 } }
   template:
     metadata:
-      labels:
-        app: {{ .Values.image.repository }}
+      labels: { { - include "project-1.selectorLabels" . | nindent 8 } }
     spec:
       containers:
-        - name: {{ .Values.image.repository }}
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: { { .Chart.Name } }
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: { { .Values.image.pullPolicy } }
           ports:
-            - containerPort: {{ .Values.service.targetPort }}
+            - containerPort: 3000
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      restartPolicy: Always
+            limits:
+              memory: 128Mi
+              cpu: 500m

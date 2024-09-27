@@ -5,7 +5,7 @@ metadata:                   #line 3  (required field)
   labels:                   
     app: nextjsweb          
 spec:                    #line7   (required field)
-  replicas: 3             #line8 How many Replica we want to create in cluster
+  replicas: 1             #line8 How many Replica we want to create in cluster
   strategy:                 #line9
     type: RollingUpdate
     rollingUpdate:

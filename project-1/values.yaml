@@ -1,0 +1,28 @@
+# project-1/values.yaml
+replicaCount: 1
+
+image:
+  repository: infectedshawarma/project-1
+  pullPolicy: IfNotPresent
+  tag: latest
+
+service:
+  enabled: true
+  type: NodePort
+  port: 80
+  targetPort: 3000
+  nodePort: 30080
+
+ingress:
+  enabled: true
+  className: nginx
+  host: localhost
+  path: /next
+  pathType: Prefix
+  serviceName: project-1-service
+  servicePort: 3000
+
+resources:
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
